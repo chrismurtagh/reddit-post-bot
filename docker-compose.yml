@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  reddit-bot:
+    build: .
+    container_name: reddit-dayz-bot
+    environment:
+      - REDDIT_CLIENT_ID=${REDDIT_CLIENT_ID}
+      - REDDIT_CLIENT_SECRET=${REDDIT_CLIENT_SECRET}
+      - REDDIT_USERNAME=${REDDIT_USERNAME}
+      - REDDIT_PASSWORD=${REDDIT_PASSWORD}
+      - REDDIT_USER_AGENT=${REDDIT_USER_AGENT:-DayZServerBot/1.0}
+      - POST_TIME=${POST_TIME:-09:00}
+      - TIMEZONE=${TIMEZONE:-UTC}
+      - POST_DELAY_SECONDS=${POST_DELAY_SECONDS:-30}
+    volumes:
+      - ./config:/app/config
+      - ./logs:/app/logs
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    command: cron
+    restart: unless-stopped
+    networks:
+      - reddit-bot-network
+
+  # Optional: for running the bot once for testing
+  reddit-bot-test:
+    build: .
+    container_name: reddit-dayz-bot-test
+    environment:
+      - REDDIT_CLIENT_ID=${REDDIT_CLIENT_ID}
+      - REDDIT_CLIENT_SECRET=${REDDIT_CLIENT_SECRET}
+      - REDDIT_USERNAME=${REDDIT_USERNAME}
+      - REDDIT_PASSWORD=${REDDIT_PASSWORD}
+      - REDDIT_USER_AGENT=${REDDIT_USER_AGENT:-DayZServerBot/1.0}
+      - POST_DELAY_SECONDS=${POST_DELAY_SECONDS:-30}
+    volumes:
+      - ./config:/app/config
+      - ./logs:/app/logs
+    command: run-once
+    profiles:
+      - test
+
+networks:
+  reddit-bot-network:
+    driver: bridge

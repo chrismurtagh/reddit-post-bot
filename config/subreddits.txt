@@ -1,0 +1,9 @@
+# DayZ Gaming Subreddits
+# Add one subreddit per line (without the r/ prefix)
+# Lines starting with # are comments and will be ignored
+
+dayz
+DayZServers
+dayzlfg
+DayZPS
+DayZXbox
