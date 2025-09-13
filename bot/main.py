@@ -10,7 +10,6 @@ from dotenv import load_dotenv
 
 from config_reader import ConfigReader
 from reddit_client import RedditClient
-from summary_generator import SummaryGenerator
 
 def setup_logging():
     log_format = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
@@ -85,26 +84,18 @@ def run_posting_job():
             delay_between_posts=delay_between_posts
         )
 
-        summary_generator = SummaryGenerator()
-
-        timestamp = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
-        summary_generator.save_post_results(results, timestamp)
-
-        logger.info("Waiting 5 minutes before generating summary to allow Reddit stats to update...")
-        time.sleep(300)
-
-        summary = summary_generator.generate_daily_summary(results, reddit_client)
-        summary_generator.save_daily_summary(summary)
-        summary_generator.save_text_summary(summary)
-
-        text_summary = summary_generator.create_text_summary(summary)
-        print("\n" + "="*60)
-        print("DAILY POSTING SUMMARY")
-        print("="*60)
-        print(text_summary)
-
+        # Simple summary of posting results
         successful_posts = len([r for r in results if r['success']])
-        logger.info(f"Posting job completed: {successful_posts}/{len(results)} posts successful")
+        failed_posts = len([r for r in results if not r['success']])
+        
+        logger.info(f"Posting completed: {successful_posts} successful, {failed_posts} failed")
+        
+        # Log individual results
+        for result in results:
+            if result['success']:
+                logger.info(f"✅ Posted to r/{result['subreddit']}: {result['url']}")
+            else:
+                logger.error(f"❌ Failed to post to r/{result['subreddit']}: {result['error']}")
 
     except Exception as e:
         logger.error(f"Error in posting job: {e}", exc_info=True)

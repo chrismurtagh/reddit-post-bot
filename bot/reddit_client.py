@@ -55,23 +55,6 @@ class RedditClient:
             logger.error(error_msg)
             return False, error_msg, None
 
-    def get_post_stats(self, post_id: str) -> Dict[str, int]:
-        try:
-            submission = self.reddit.submission(id=post_id)
-            submission.comments.replace_more(limit=0)
-
-            stats = {
-                'upvotes': submission.ups,
-                'downvotes': submission.downs,
-                'score': submission.score,
-                'comments': len(submission.comments.list()),
-                'upvote_ratio': round(submission.upvote_ratio * 100, 1)
-            }
-
-            return stats
-        except Exception as e:
-            logger.error(f"Error getting stats for post {post_id}: {e}")
-            return {'upvotes': 0, 'downvotes': 0, 'score': 0, 'comments': 0, 'upvote_ratio': 0}
 
     def validate_image(self, image_path: str) -> bool:
         try:

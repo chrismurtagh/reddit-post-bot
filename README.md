@@ -1,14 +1,13 @@
 # Reddit DayZ Server Bot 🎮
 
-An automated Reddit posting bot specifically designed for DayZ server advertising. This bot supports both text and image posts, includes comprehensive logging, and provides detailed engagement tracking.
+An automated Reddit posting bot specifically designed for DayZ server advertising. This bot supports both text and image posts with simple, clean logging.
 
 ## Features
 
 - 🚀 **Automated Posting**: Schedule daily posts to multiple subreddits
 - 🖼️ **Image Support**: Post screenshots with text descriptions
-- 📊 **Engagement Tracking**: Monitor upvotes, comments, and scores
 - 🔄 **Rate Limiting**: Respects Reddit's API limits
-- 📝 **Comprehensive Logging**: Detailed logs and daily summaries
+- 📝 **Simple Logging**: Clean console output and basic log files
 - 🐳 **Docker Ready**: Easy deployment with Docker Compose
 - ⏰ **Flexible Scheduling**: Configurable posting times and timezones
 
@@ -102,46 +101,35 @@ reddit-post/
 ├── bot/
 │   ├── main.py              # Main bot application
 │   ├── reddit_client.py     # Reddit API wrapper
-│   ├── config_reader.py     # Configuration parser
-│   └── summary_generator.py # Logging and reporting
+│   └── config_reader.py     # Configuration parser
 ├── config/
 │   ├── subreddits.txt       # Target subreddits
 │   ├── post_content.txt     # Post content
 │   └── post_image.jpg       # Optional image
-├── logs/                    # Generated logs and summaries
+├── logs/                    # Basic log files
 ├── Dockerfile
 ├── docker-compose.yml
 ├── requirements.txt
 └── .env.example
 ```
 
-## Monitoring and Logs
+## Logging
 
-The bot creates detailed logs in the `logs/` directory:
+The bot provides simple, clean logging:
 
-- `bot.log`: Main application log
-- `daily_summary_YYYYMMDD.json`: JSON summary with engagement stats
-- `daily_summary_YYYYMMDD.txt`: Human-readable summary
-- `post_results_YYYYMMDD_HHMMSS.json`: Individual posting results
+- **Console Output**: Real-time status updates during posting
+- **Log File**: Basic application logs saved to `logs/bot.log`
+- **Success/Failure**: Clear indication of which posts succeeded or failed
 
-### Example Daily Summary
+### Example Output
 
 ```
-Reddit Bot Daily Summary - 2024-01-15
-==================================================
-
-POSTING OVERVIEW:
-• Total posts attempted: 5
-• Successful posts: 4
-• Failed posts: 1
-• Success rate: 80.0%
-
-ENGAGEMENT METRICS:
-• Total upvotes: 45
-• Total comments: 12
-• Total score: 38
-• Average score per post: 9.5
-• Average upvotes per post: 11.3
+2024-01-15 09:00:01 - INFO - Starting daily posting job...
+2024-01-15 09:00:02 - INFO - Posting to 3 subreddits...
+2024-01-15 09:00:03 - INFO - ✅ Posted to r/dayz: https://reddit.com/r/dayz/comments/abc123
+2024-01-15 09:00:33 - INFO - ✅ Posted to r/DayZServers: https://reddit.com/r/DayZServers/comments/def456
+2024-01-15 09:01:03 - ERROR - ❌ Failed to post to r/dayzlfg: Subreddit not found
+2024-01-15 09:01:03 - INFO - Posting completed: 2 successful, 1 failed
 ```
 
 ## Docker Commands
@@ -213,7 +201,7 @@ This project is for educational and legitimate server advertising purposes only.
 ## Support
 
 For issues and questions:
-1. Check the logs in `logs/` directory
+1. Check the console output and `logs/bot.log`
 2. Review Reddit API documentation
 3. Verify subreddit posting rules
 4. Open an issue with detailed logs and error messages
